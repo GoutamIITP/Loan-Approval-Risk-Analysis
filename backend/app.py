@@ -3,7 +3,7 @@ Main Flask Application
 Integrates all components: validation, rules, ML, explainability, audit
 """
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import joblib
 import pandas as pd
@@ -53,6 +53,22 @@ def health_check():
         'version': '1.0.0',
         'ml_available': ml_available
     })
+
+
+@app.route('/')
+def serve_frontend():
+    """Serve the frontend HTML file"""
+    return send_from_directory('../frontend', 'index.html')
+
+
+@app.route('/<path:path>')
+def serve_static(path):
+    """Serve static files (CSS, JS, images)"""
+    try:
+        return send_from_directory('../frontend', path)
+    except:
+        # If file not found, serve index.html (for SPA routing)
+        return send_from_directory('../frontend', 'index.html')
 
 
 @app.route('/api/assess-loan', methods=['POST'])
@@ -346,7 +362,14 @@ if __name__ == '__main__':
     print("\n" + "="*50)
     print("🏦 FinCrime Loan Risk Assessment API")
     print("="*50)
-    print("Starting server on http://localhost:5000")
+    
+    # Get port from environment variable (for deployment) or use 5000 for local
+    port = int(os.environ.get('PORT', 5000))
+    
+    # Use debug=False for production
+    debug_mode = os.environ.get('FLASK_ENV', 'development') == 'development'
+    
+    print(f"Starting server on port {port}")
     print("="*50 + "\n")
     
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=debug_mode, host='0.0.0.0', port=port)
