@@ -1,6 +1,6 @@
 @echo off
 echo ==========================================
-echo 🏦 FinCrime Loan Risk Assessment System
+echo 🏦 Loan Approval Risk Analysis System
 echo ==========================================
 echo.
 echo Starting Backend and Frontend...

@@ -2,7 +2,7 @@
 # This script starts both backend and frontend, then opens the browser
 
 Write-Host "==========================================" -ForegroundColor Cyan
-Write-Host "🏦 FinCrime Loan Risk Assessment System" -ForegroundColor Green
+Write-Host "🏦 Loan Approval Risk Analysis System" -ForegroundColor Green
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host ""
 

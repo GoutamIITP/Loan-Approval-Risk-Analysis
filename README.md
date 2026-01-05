@@ -1,4 +1,4 @@
-# 🏦 FinCrime Loan Risk Assessment System
+# 🏦 Loan Approval Risk Analysis System
 
 A production-grade loan risk assessment system with ML-powered decision support, rule-based compliance, explainability, and comprehensive audit logging.
 
@@ -500,4 +500,4 @@ This architecture mirrors real financial systems used by banks and fintechs! �
 
 ---
 
-Built with ❤️ for FinCrime Risk Assessment
+Built with ❤️ for Loan Approval Risk Analysis

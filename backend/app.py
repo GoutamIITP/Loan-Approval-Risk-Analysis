@@ -360,7 +360,7 @@ if __name__ == '__main__':
     os.makedirs('logs', exist_ok=True)
     
     print("\n" + "="*50)
-    print("🏦 FinCrime Loan Risk Assessment API")
+    print("🏦 Loan Approval Risk Analysis API")
     print("="*50)
     
     # Get port from environment variable (for deployment) or use 5000 for local
