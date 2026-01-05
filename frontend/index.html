@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FinCrime Loan Risk Assessment</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .header {
+        text-align: center;
+        color: white;
+        margin-bottom: 30px;
+      }
+
+      .header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+      }
+
+      .header p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+
+      .main-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .card {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .card h2 {
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+        border-bottom: 3px solid #667eea;
+        padding-bottom: 10px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #555;
+        font-weight: 600;
+      }
+
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: #667eea;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+      }
+
+      .btn {
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .result-section {
+        display: none;
+      }
+
+      .result-section.show {
+        display: block;
+      }
+
+      .decision-badge {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+      }
+
+      .decision-approved {
+        background: #10b981;
+        color: white;
+      }
+
+      .decision-rejected {
+        background: #ef4444;
+        color: white;
+      }
+
+      .decision-review {
+        background: #f59e0b;
+        color: white;
+      }
+
+      .risk-level {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 15px 0;
+      }
+
+      .risk-badge {
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      .risk-high {
+        background: #fee;
+        color: #c00;
+      }
+
+      .risk-medium {
+        background: #fef3cd;
+        color: #856404;
+      }
+
+      .risk-low {
+        background: #d1f2e8;
+        color: #0a6e47;
+      }
+
+      .explanation-item {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 10px 0;
+        border-left: 4px solid #667eea;
+      }
+
+      .flag-item {
+        background: #fff3cd;
+        padding: 12px;
+        border-radius: 6px;
+        margin: 8px 0;
+        border-left: 3px solid #ffc107;
+      }
+
+      .flag-severity {
+        font-weight: 700;
+        color: #856404;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin-top: 15px;
+      }
+
+      .stat-box {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+      }
+
+      .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #667eea;
+      }
+
+      .stat-label {
+        color: #666;
+        font-size: 0.9rem;
+        margin-top: 5px;
+      }
+
+      .loading {
+        display: none;
+        text-align: center;
+        padding: 20px;
+      }
+
+      .loading.show {
+        display: block;
+      }
+
+      .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .error-message {
+        background: #fee;
+        color: #c00;
+        padding: 15px;
+        border-radius: 6px;
+        margin: 15px 0;
+        border-left: 4px solid #c00;
+        display: none;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+
+      @media (max-width: 768px) {
+        .main-content {
+          grid-template-columns: 1fr;
+        }
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .impact-positive {
+        color: #10b981;
+      }
+
+      .impact-negative {
+        color: #ef4444;
+      }
+
+      .impact-neutral {
+        color: #6b7280;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🏦 FinCrime Loan Risk Assessment</h1>
+        <p>
+          Advanced ML-powered loan decision system with compliance & audit trail
+        </p>
+      </div>
+
+      <div class="main-content">
+        <!-- Left Panel: Application Form -->
+        <div class="card">
+          <h2>📋 Loan Application</h2>
+          <form id="loanForm">
+            <div class="form-group">
+              <label for="applicant_income">Applicant Income (₹/month)</label>
+              <input
+                type="number"
+                id="applicant_income"
+                name="applicant_income"
+                placeholder="e.g., 5000"
+                required
+                min="0"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="coapplicant_income"
+                >Co-applicant Income (₹/month)</label
+              >
+              <input
+                type="number"
+                id="coapplicant_income"
+                name="coapplicant_income"
+                placeholder="e.g., 2000"
+                value="0"
+                min="0"
+              />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="loan_amount">Loan Amount (₹ in thousands)</label>
+                <input
+                  type="number"
+                  id="loan_amount"
+                  name="loan_amount"
+                  placeholder="e.g., 150"
+                  required
+                  min="1"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="loan_amount_term">Loan Term (months)</label>
+                <select id="loan_amount_term" name="loan_amount_term" required>
+                  <option value="">Select term</option>
+                  <option value="180">15 years (180 months)</option>
+                  <option value="240">20 years (240 months)</option>
+                  <option value="360" selected>30 years (360 months)</option>
+                  <option value="480">40 years (480 months)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="credit_history">Credit History</label>
+                <select id="credit_history" name="credit_history" required>
+                  <option value="">Select</option>
+                  <option value="1">Good (1)</option>
+                  <option value="0">None/Bad (0)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="property_area">Property Area</label>
+                <select id="property_area" name="property_area" required>
+                  <option value="">Select area</option>
+                  <option value="Urban">Urban</option>
+                  <option value="Semiurban">Semi-urban</option>
+                  <option value="Rural">Rural</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="self_employed">Self Employed?</label>
+                <select id="self_employed" name="self_employed">
+                  <option value="0">No</option>
+                  <option value="1">Yes</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="dependents">Number of Dependents</label>
+                <select id="dependents" name="dependents">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3+</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" class="btn" id="submitBtn">
+              🔍 Assess Risk
+            </button>
+          </form>
+
+          <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="margin-top: 15px">Processing application...</p>
+          </div>
+
+          <div class="error-message" id="errorMessage"></div>
+        </div>
+
+        <!-- Right Panel: Results -->
+        <div class="card">
+          <h2>📊 Assessment Results</h2>
+
+          <div id="resultSection" class="result-section">
+            <div id="decisionBadge"></div>
+
+            <div class="risk-level">
+              <strong>Risk Level:</strong>
+              <span id="riskBadge"></span>
+              <span id="riskScore"></span>
+            </div>
+
+            <div style="margin: 20px 0">
+              <strong>Application ID:</strong> <span id="appId"></span>
+            </div>
+
+            <div style="margin: 15px 0">
+              <strong>ML Confidence:</strong> <span id="mlConfidence"></span>
+            </div>
+
+            <div
+              style="
+                margin: 15px 0;
+                padding: 15px;
+                background: #f8f9fa;
+                border-radius: 8px;
+              "
+            >
+              <strong>Reason:</strong>
+              <p id="decisionReason" style="margin-top: 8px"></p>
+            </div>
+
+            <div style="margin-top: 25px">
+              <h3 style="margin-bottom: 15px; color: #333">🔍 Key Factors</h3>
+              <div id="explanationSection"></div>
+            </div>
+
+            <div id="flagsSection" style="margin-top: 25px"></div>
+
+            <div id="warningsSection" style="margin-top: 20px"></div>
+
+            <div style="margin-top: 15px; font-size: 0.85rem; color: #666">
+              <strong>Processing time:</strong>
+              <span id="processingTime"></span>
+            </div>
+          </div>
+
+          <div
+            id="emptyState"
+            style="text-align: center; padding: 50px 20px; color: #999"
+          >
+            <div style="font-size: 4rem">📋</div>
+            <p style="margin-top: 15px">
+              Fill out the form and click "Assess Risk" to see results
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Statistics Panel -->
+      <div class="card" style="margin-top: 20px" id="statsCard">
+        <h2>📈 System Statistics</h2>
+        <div class="stats-grid" id="statsGrid">
+          <div class="stat-box">
+            <div class="stat-number" id="totalApps">-</div>
+            <div class="stat-label">Total Applications</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number" id="approvalRate">-</div>
+            <div class="stat-label">Approval Rate</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number" id="avgTime">-</div>
+            <div class="stat-label">Avg Processing (ms)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const API_BASE_URL = "http://localhost:5000/api";
+
+      // Form submission
+      document
+        .getElementById("loanForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          // Show loading
+          document.getElementById("loading").classList.add("show");
+          document.getElementById("submitBtn").disabled = true;
+          document.getElementById("errorMessage").classList.remove("show");
+          document.getElementById("resultSection").classList.remove("show");
+          document.getElementById("emptyState").style.display = "none";
+
+          // Collect form data
+          const formData = new FormData(e.target);
+          const data = {};
+          for (let [key, value] of formData.entries()) {
+            data[key] = value;
+          }
+
+          try {
+            const response = await fetch(`${API_BASE_URL}/assess-loan`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+              displayResults(result);
+              loadStatistics();
+            } else {
+              showError(result.reason || "Assessment failed");
+            }
+          } catch (error) {
+            showError(
+              "Error connecting to server. Please ensure the backend is running."
+            );
+            console.error("Error:", error);
+          } finally {
+            document.getElementById("loading").classList.remove("show");
+            document.getElementById("submitBtn").disabled = false;
+          }
+        });
+
+      function displayResults(result) {
+        document.getElementById("emptyState").style.display = "none";
+        document.getElementById("resultSection").classList.add("show");
+
+        // Decision badge
+        const decisionBadge = document.getElementById("decisionBadge");
+        let badgeClass = "";
+        if (result.decision === "APPROVED") {
+          badgeClass = "decision-approved";
+        } else if (result.decision === "REJECTED") {
+          badgeClass = "decision-rejected";
+        } else {
+          badgeClass = "decision-review";
+        }
+        decisionBadge.innerHTML = `<div class="decision-badge ${badgeClass}">${result.decision}</div>`;
+
+        // Risk level
+        const riskBadge = document.getElementById("riskBadge");
+        let riskClass = "";
+        if (result.risk_level === "HIGH") {
+          riskClass = "risk-high";
+        } else if (result.risk_level === "MEDIUM") {
+          riskClass = "risk-medium";
+        } else {
+          riskClass = "risk-low";
+        }
+        riskBadge.innerHTML = `<span class="risk-badge ${riskClass}">${result.risk_level}</span>`;
+        document.getElementById(
+          "riskScore"
+        ).textContent = `(Score: ${result.risk_score}/100)`;
+
+        // Other details
+        document.getElementById("appId").textContent = result.application_id;
+        document.getElementById("mlConfidence").textContent =
+          result.ml_confidence;
+        document.getElementById("decisionReason").textContent = result.reason;
+        document.getElementById(
+          "processingTime"
+        ).textContent = `${result.processing_time_ms}ms`;
+
+        // Explanation
+        if (result.explanation && result.explanation.key_factors) {
+          const explanationHtml = result.explanation.key_factors
+            .map(
+              (factor) => `
+                    <div class="explanation-item">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <strong class="impact-${factor.impact.toLowerCase()}">${
+                factor.factor
+              }</strong>
+                            <span style="font-size: 0.85rem; color: #666;">${
+                              factor.weight
+                            }</span>
+                        </div>
+                        <div style="font-size: 0.9rem; color: #555;">${
+                          factor.explanation
+                        }</div>
+                    </div>
+                `
+            )
+            .join("");
+          document.getElementById("explanationSection").innerHTML =
+            explanationHtml;
+        }
+
+        // Flags
+        if (result.rule_flags && result.rule_flags.length > 0) {
+          const flagsHtml = result.rule_flags
+            .map(
+              (flag) => `
+                    <div class="flag-item">
+                        <span class="flag-severity">[${flag.severity}]</span> ${flag.rule}
+                        <div style="font-size: 0.9rem; margin-top: 5px;">${flag.description}</div>
+                    </div>
+                `
+            )
+            .join("");
+          document.getElementById("flagsSection").innerHTML = `
+                    <h3 style="margin-bottom: 15px; color: #333;">⚠️ Risk Flags (${result.rule_flags.length})</h3>
+                    ${flagsHtml}
+                `;
+        } else {
+          document.getElementById("flagsSection").innerHTML = "";
+        }
+
+        // Warnings
+        if (result.warnings && result.warnings.length > 0) {
+          const warningsHtml = result.warnings
+            .map((w) => `<li>${w}</li>`)
+            .join("");
+          document.getElementById("warningsSection").innerHTML = `
+                    <div style="background: #fff3cd; padding: 15px; border-radius: 6px;">
+                        <strong>⚠️ Warnings:</strong>
+                        <ul style="margin-top: 10px; margin-left: 20px;">${warningsHtml}</ul>
+                    </div>
+                `;
+        } else {
+          document.getElementById("warningsSection").innerHTML = "";
+        }
+      }
+
+      function showError(message) {
+        const errorDiv = document.getElementById("errorMessage");
+        errorDiv.textContent = message;
+        errorDiv.classList.add("show");
+      }
+
+      async function loadStatistics() {
+        try {
+          const response = await fetch(`${API_BASE_URL}/statistics`);
+          const stats = await response.json();
+
+          if (stats) {
+            document.getElementById("totalApps").textContent =
+              stats.total_applications || 0;
+            document.getElementById("approvalRate").textContent =
+              stats.approval_rate || "0%";
+            document.getElementById("avgTime").textContent =
+              stats.avg_processing_time_ms
+                ? Math.round(stats.avg_processing_time_ms)
+                : "-";
+          }
+        } catch (error) {
+          console.error("Error loading statistics:", error);
+        }
+      }
+
+      // Load statistics on page load
+      loadStatistics();
+
+      // Refresh statistics every 30 seconds
+      setInterval(loadStatistics, 30000);
+    </script>
+  </body>
+</html>

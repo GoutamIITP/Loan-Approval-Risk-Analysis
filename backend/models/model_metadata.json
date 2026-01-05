@@ -1,0 +1,23 @@
+{
+  "model_type": "RandomForestClassifier",
+  "n_estimators": 100,
+  "train_accuracy": 0.9075,
+  "test_accuracy": 0.9,
+  "cv_mean": 0.89,
+  "cv_std": 0.012869537676233755,
+  "roc_auc": 0.8622661122661123,
+  "features": [
+    "ApplicantIncome",
+    "CoapplicantIncome",
+    "LoanAmount",
+    "Loan_Amount_Term",
+    "Credit_History",
+    "Self_Employed",
+    "Dependents",
+    "Total_Income",
+    "Loan_to_Income",
+    "DTI_Ratio",
+    "Property_Area"
+  ],
+  "training_date": "2026-01-05T16:17:07.283715"
+}

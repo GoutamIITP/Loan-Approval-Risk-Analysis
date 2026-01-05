@@ -1,0 +1,40 @@
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+logs/*.log
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Models - Keep these for the project to work!
+# backend/models/*.pkl  (Included in repo)
+# backend/models/*.csv  (Included in repo)
+
+# Environment variables
+.env
+
+# Audit database (will be created on first run)
+backend/logs/audit.db
