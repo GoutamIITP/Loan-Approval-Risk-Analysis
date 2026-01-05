@@ -4,7 +4,7 @@ REM This launches both backend and frontend automatically
 
 echo.
 echo ==========================================
-echo 🏦 Starting FinCrime Loan Risk System
+echo 🏦 Starting Loan Approval Risk Analysis System
 echo ==========================================
 echo.
 

@@ -1,4 +1,4 @@
-# 🚀 Render Deployment Guide - FinCrime Loan Risk System
+# 🚀 Render Deployment Guide - Loan Approval Risk Analysis System
 
 ## ⚡ Quick Configuration for Render
 
@@ -12,7 +12,7 @@ Based on your Render deployment screen, here are the **exact settings** to use:
 
 | Field              | Value                                         |
 | ------------------ | --------------------------------------------- |
-| **Name**           | `fincrime-loan-risk-system`                   |
+| **Name**           | `loan-approval-risk-analysis`                 |
 | **Language**       | `Python 3`                                    |
 | **Branch**         | `main`                                        |
 | **Region**         | `Oregon (US West)` (or your preferred region) |
@@ -115,7 +115,7 @@ The build process will:
 After deployment, Render will give you a URL like:
 
 ```
-https://fincrime-loan-risk-system.onrender.com
+https://loan-approval-risk-analysis.onrender.com
 ```
 
 ### Frontend Access

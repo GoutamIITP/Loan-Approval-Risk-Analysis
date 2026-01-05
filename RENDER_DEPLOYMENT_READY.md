@@ -8,13 +8,13 @@ Copy these settings **exactly** into your Render deployment form:
 
 ### **📋 Basic Configuration**
 
-| Field              | Value                       |
-| ------------------ | --------------------------- |
-| **Name**           | `fincrime-loan-risk-system` |
-| **Language**       | `Python 3`                  |
-| **Branch**         | `main`                      |
-| **Region**         | `Oregon (US West)`          |
-| **Root Directory** | _(leave empty)_             |
+| Field              | Value                         |
+| ------------------ | ----------------------------- |
+| **Name**           | `loan-approval-risk-analysis` |
+| **Language**       | `Python 3`                    |
+| **Branch**         | `main`                        |
+| **Region**         | `Oregon (US West)`            |
+| **Root Directory** | _(leave empty)_               |
 
 ---
 
@@ -81,7 +81,7 @@ I've prepared everything:
       → Serves both API and frontend
 
 [4/4] 🌐 App Goes Live!
-      → Your URL: https://fincrime-loan-risk-system.onrender.com
+      → Your URL: https://loan-approval-risk-analysis.onrender.com
 ```
 
 ---
@@ -294,7 +294,7 @@ Once deployed, share your URL:
 
 **Click "Deploy web service" now!** 🚀
 
-Your FinCrime Loan Risk Assessment System will be live on the internet in minutes! 🌐
+Your Loan Approval Risk Analysis System will be live on the internet in minutes! 🌐
 
 ---
 

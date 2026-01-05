@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: fincrime-loan-risk-system
+    name: loan-approval-risk-analysis
     env: python
     buildCommand: "pip install -r requirements.txt && cd notebooks && python train_model.py"
     startCommand: "cd backend && python app.py"
