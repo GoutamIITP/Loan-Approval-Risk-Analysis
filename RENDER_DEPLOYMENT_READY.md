@@ -298,6 +298,6 @@ Your Loan Approval Risk Analysis System will be live on the internet in minutes!
 
 ---
 
-**Built with ❤️ for FinCrime Risk Assessment**
+**Built with ❤️ for Loan Approval Risk Analysis**
 
 _From GitHub to Global - One Click Deployment!_
